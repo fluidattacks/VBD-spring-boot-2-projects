@@ -11,6 +11,7 @@ import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@org.springframework.context.annotation.PropertySource("classpath:tuning.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -25,6 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/users**").hasRole("USER").and().formLogin().permitAll();
+        http.csrf().disable().authorizeRequests().requestMatchers(org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest.toAnyEndpoint().excluding("caches")).permitAll().antMatchers("/users**").hasRole("USER").and().formLogin().permitAll();
     }
 }
